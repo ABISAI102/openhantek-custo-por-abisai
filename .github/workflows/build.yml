@@ -1,0 +1,38 @@
+name: Build OpenHantek Windows
+
+on:
+  push:
+    branches: [ principal, main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '5.15.2'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_mingw81'
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake -G "MinGW Makefiles" ..
+
+    - name: Build Project
+      run: |
+        cd build
+        cmake --build . --config Release
+
+    - name: Upload Executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: OpenHantek-Automotivo-Win64
+        path: build/
