@@ -2,29 +2,29 @@ name: Build OpenHantek Windows
 
 on:
   push:
-    branches: [ principal, main, master ]
+    branches: [ main, principal, master ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '5.15.2'
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_mingw81'
+        arch: 'win64_msvc2019_64'
 
     - name: Configure CMake
       run: |
         mkdir build
         cd build
-        cmake -G "MinGW Makefiles" ..
+        cmake ..
 
     - name: Build Project
       run: |
@@ -32,7 +32,7 @@ jobs:
         cmake --build . --config Release
 
     - name: Upload Executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: OpenHantek-Automotivo-Win64
-        path: build/
+        path: build/Release/
