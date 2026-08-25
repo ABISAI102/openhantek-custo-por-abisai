@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v4
@@ -18,12 +18,13 @@ jobs:
         version: '5.15.2'
         host: 'windows'
         target: 'desktop'
+        arch: 'win64_msvc2019_64'
 
     - name: Configure CMake
       run: |
         mkdir build
         cd build
-        cmake ..
+        cmake -DCMAKE_PREFIX_PATH="%Qt5_DIR%" -DENABLE_DOC=OFF -DCPACK_CONFIG_FILE="" ..
 
     - name: Build Project
       run: |
